@@ -1,0 +1,55 @@
+# Tiny Tapeout project information
+project:
+  title:        "8-bit_ALU"      # Project title
+  author:       "Marius L"      # Your name
+  discord:      "carjaguar"      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
+  description:  "8-bit Arithmetic Logic Unit adapted for TinyTapeout"      # One line description of what your project does
+  language:     "Verilog" # other examples include SystemVerilog, Amaranth, VHDL, etc
+  clock_hz:     50000000       # Clock frequency in Hz (or 0 if not applicable)
+
+  # How many tiles your design occupies? A single tile is about 167x108 uM.
+  tiles: "1x1"          # Valid values: 1x1, 1x2, 2x2, 3x2, 4x2, 6x2 or 8x2
+
+  # Your top module name must start with "tt_um_". Make it unique by including your github username:
+  top_module:  "tt_um_alu_MariusL00"
+
+  # List your project's source files here.
+  # Source files must be in ./src and you must list each source file separately, one per line.
+  # Don't forget to also update `PROJECT_SOURCES` in test/Makefile.
+  source_files:
+    - "project.v"
+
+# The pinout of your project. Leave unused pins blank. DO NOT delete or add any pins.
+pinout:
+  # Inputs (les données brutes 8 bits)
+  ui[0]: "data_in[0]"
+  ui[1]: "data_in[1]"
+  ui[2]: "data_in[2]"
+  ui[3]: "data_in[3]"
+  ui[4]: "data_in[4]"
+  ui[5]: "data_in[5]"
+  ui[6]: "data_in[6]"
+  ui[7]: "data_in[7]"
+
+  # Outputs (le résultat découpé en tranches de 8 bits)
+  uo[0]: "data_out[0] / zero flag"
+  uo[1]: "data_out[1] / carry flag"
+  uo[2]: "data_out[2] / negative flag"
+  uo[3]: "data_out[3] / overflow flag"
+  uo[4]: "data_out[4]"
+  uo[5]: "data_out[5]"
+  uo[6]: "data_out[6]"
+  uo[7]: "data_out[7]"
+
+  # Bidirectional pins (utilisées comme signaux de contrôle en ENTRÉE)
+  uio[0]: "write_address[0] (0 à 8 pour choisir où écrire)"
+  uio[1]: "write_address[1]"
+  uio[2]: "write_address[2]"
+  uio[3]: "write_address[3]"
+  uio[4]: "write_enable (1 pour sauvegarder data_in)"
+  uio[5]: "read_select[0] (0 à 4 pour choisir ce qu'on lit en sortie)"
+  uio[6]: "read_select[1]"
+  uio[7]: "read_select[2]"
+
+# Do not change!
+yaml_version: 6
