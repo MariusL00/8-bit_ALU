@@ -3,47 +3,69 @@
 
 import cocotb
 from cocotb.clock import Clock
-from cocotb.triggers import ClockCycles
-
+from cocotb.triggers import ClockCycles, Timer
 
 @cocotb.test()
 async def test_project(dut):
-    dut._log.info("Start")
+    dut._log.info("Démarrage de la simulation")
 
-    # Set the clock period to 10 us (100 KHz)
+    # Génération de l'horloge (période de 10 us -> 100 KHz)
     clock = Clock(dut.clk, 10, units="us")
     cocotb.start_soon(clock.start())
 
-    # Reset
-    dut._log.info("Reset")
+    # 1. Initialisation stricte
+    dut._log.info("Phase de Reset")
     dut.ena.value = 1
     dut.ui_in.value = 0
     dut.uio_in.value = 0
     dut.rst_n.value = 0
-    await ClockCycles(dut.clk, 10)
+
+    await ClockCycles(dut.clk, 5)
+
     dut.rst_n.value = 1
+    await ClockCycles(dut.clk, 2)
 
-    dut._log.info("Test project behavior")
+    # 2. Cas de test 1 : 5 + 10 = 15
+    dut._log.info("Test 1: Addition simple (5 + 10 = 15)")
+    dut.ui_in.value = 5
+    dut.uio_in.value = 10
+    await ClockCycles(dut.clk, 2)
+    assert dut.uo_out.value == 15
 
-    # Set the input values you want to test
-    dut.ui_in.value = 20
-    dut.uio_in.value = 30
+    # 3. Cas de test 2 : 100 + 50 = 150
+    dut._log.info("Test 2: Addition (100 + 50 = 150)")
+    dut.ui_in.value = 100
+    dut.uio_in.value = 50
+    await ClockCycles(dut.clk, 2)
+    assert dut.uo_out.value == 150
 
-    # Wait for one clock cycle to see the output values
-    await ClockCycles(dut.clk, 1)
+    # 4. Cas de test 3 : Test de l'overflow (200 + 100 = 44)
+    dut._log.info("Test 3: Débordement (200 + 100 = 44)")
+    dut.ui_in.value = 200
+    dut.uio_in.value = 100
+    await ClockCycles(dut.clk, 2)
+    assert dut.uo_out.value == 44
 
-    # The following assersion is just an example of how to check the output values.
-    # Change it to match the actual expected output of your module:
-    
-    # Application des nouvelles entrées
-    dut.ui_in.value = 20
-    dut.uio_in.value = 30
+    # 5. Cas de test 4 : 255 + 1 = 0
+    dut._log.info("Test 4: Bouclage 8 bits (255 + 1 = 0)")
+    dut.ui_in.value = 255
+    dut.uio_in.value = 1
+    await ClockCycles(dut.clk, 2)
+    assert dut.uo_out.value == 0
 
-    # Attente d'un cycle d'horloge pour laisser l'ALU calculer
-    await ClockCycles(dut.clk, 1)
+    # 6. Test du Reset asynchrone
+    dut._log.info("Test 5: Reset asynchrone en cours d'opération")
+    dut.ui_in.value = 50
+    dut.uio_in.value = 50
+    await ClockCycles(dut.clk, 2)
+    assert dut.uo_out.value == 100
 
-    # Vérification de la sortie
-    assert dut.uo_out.value == 50
+    dut.rst_n.value = 0
+    await Timer(2, units="us") 
+    assert dut.uo_out.value == 0
 
-    # Keep testing the module by changing the input values, waiting for
-    # one or more clock cycles, and asserting the expected output values.
+    dut.rst_n.value = 1
+    await ClockCycles(dut.clk, 2)
+    assert dut.uo_out.value == 100
+
+    dut._log.info("Simulation terminée avec succès !")
