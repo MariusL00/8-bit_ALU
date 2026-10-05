@@ -34,6 +34,15 @@ async def test_project(dut):
 
     # The following assersion is just an example of how to check the output values.
     # Change it to match the actual expected output of your module:
+    
+    # Application des nouvelles entrées
+    dut.ui_in.value = 20
+    dut.uio_in.value = 30
+
+    # Attente d'un cycle d'horloge pour laisser l'ALU calculer
+    await ClockCycles(dut.clk, 1)
+
+    # Vérification de la sortie
     assert dut.uo_out.value == 50
 
     # Keep testing the module by changing the input values, waiting for
