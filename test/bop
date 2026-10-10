@@ -1,0 +1,84 @@
+je suis entrain de faire un design avec tiny tapeout.
+
+j'ai cette erreur quand je fais le test :
+# marius @ marius-VirtualBox in ~/alu_projet_tt/test on git:main x tt_env [16:10:56] 
+$ make -B   
+rm -f results.xml
+mkdir -p sim_build/rtl
+/usr/bin/iverilog -o sim_build/rtl/sim.vvp -s tb -g2012 -I/home/marius/alu_projet_tt/test/../src -f sim_build/rtl/cmds.f  /home/marius/alu_projet_tt/test/../src/project.v /home/marius/alu_projet_tt/test/tb.v
+/home/marius/alu_projet_tt/tt_env/lib/python3.10/site-packages/cocotb_tools/makefiles/simulators/Makefile.icarus:68: Using MODULE is deprecated, please use COCOTB_TEST_MODULES instead.
+rm -f results.xml
+COCOTB_TEST_MODULES=test COCOTB_TESTCASE=  COCOTB_TOPLEVEL=tb TOPLEVEL_LANG=verilog       \
+	/usr/bin/vvp -m /home/marius/alu_projet_tt/tt_env/lib/python3.10/site-packages/cocotb/libs/libcocotbvpi_icarus.so   sim_build/rtl/sim.vvp   
+     -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:242  in gpi_load_users                  Loaded entry library: '/usr/lib/x86_64-linux-gnu/libpython3.10.so.1.0'
+     -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:233  in gpi_load_users                  Running entry func 'initialize' from loaded library '/home/marius/alu_projet_tt/tt_env/lib/python3.10/site-packages/cocotb/simulator.cpython-310-x86_64-linux-gnu.so'
+     -.--ns INFO     pygpi                              ..ib/pygpi/embed.cpp:114  in initialize                      Using Python 3.10.19 interpreter at /home/marius/alu_projet_tt/tt_env/bin/python3
+     -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:74   in gpi_print_registered_impl       GPI: VPI support registered
+     0.00ns INFO     cocotb.initialize                  Seeding Python random module with 1791641460
+     0.00ns WARNING  gpi                                vpi_iterate returned NULL for type vpiInstance for object NULL
+     0.00ns INFO     cocotb.initialize                  Initialized cocotb v2.1.0 from /home/marius/alu_projet_tt/tt_env/lib/python3.10/site-packages/cocotb
+     0.00ns INFO     cocotb.initialize                  Running on Icarus Verilog version 11.0 (stable)
+Traceback (most recent call last):
+  File "/home/marius/alu_projet_tt/tt_env/lib/python3.10/site-packages/pygpi/entry.py", line 42, in load_entry
+    entry_func()
+  File "/home/marius/alu_projet_tt/tt_env/lib/python3.10/site-packages/cocotb/regression.py", line 1190, in _run_regression
+    _setup_regression_manager()
+  File "/home/marius/alu_projet_tt/tt_env/lib/python3.10/site-packages/cocotb/regression.py", line 1155, in _setup_regression_manager
+    _manager_inst.setup_pytest_assertion_rewriting()
+  File "/home/marius/alu_projet_tt/tt_env/lib/python3.10/site-packages/cocotb/regression.py", line 339, in setup_pytest_assertion_rewriting
+    pytest_conf = Config.fromdictargs(
+  File "/home/marius/alu_projet_tt/tt_env/lib/python3.10/site-packages/_pytest/config/__init__.py", line 1289, in fromdictargs
+    config.parse(args, addopts=False)
+  File "/home/marius/alu_projet_tt/tt_env/lib/python3.10/site-packages/_pytest/config/__init__.py", line 1583, in parse
+    self.pluginmanager.load_setuptools_entrypoints("pytest11")
+  File "/home/marius/alu_projet_tt/tt_env/lib/python3.10/site-packages/pluggy/_manager.py", line 417, in load_setuptools_entrypoints
+    self.register(plugin, name=ep.name)
+  File "/home/marius/alu_projet_tt/tt_env/lib/python3.10/site-packages/_pytest/config/__init__.py", line 571, in register
+    plugin_name = super().register(plugin, name)
+  File "/home/marius/alu_projet_tt/tt_env/lib/python3.10/site-packages/pluggy/_manager.py", line 168, in register
+    self._verify_hook(hook, hookimpl)
+  File "/home/marius/alu_projet_tt/tt_env/lib/python3.10/site-packages/pluggy/_manager.py", line 343, in _verify_hook
+    raise PluginValidationError(
+pluggy._manager.PluginValidationError: Plugin 'launch_testing' for hook 'pytest_pycollect_makemodule'
+hookimpl definition: pytest_pycollect_makemodule(path, parent)
+Argument(s) {'path'} are declared in the hookimpl but can not be found in the hookspec
+make: *** [/home/marius/alu_projet_tt/tt_env/lib/python3.10/site-packages/cocotb_tools/makefiles/simulators/Makefile.icarus:69: results.xml] Error 1
+
+
+
+voici mon project.v :
+`default_nettype none                                                                                                                 
+
+module tt_um_alu_MariusL00 (
+    input  wire [7:0] ui_in,    // Entrée A (8 bits)
+    output wire [7:0] uo_out,   // Sortie Résultat (8 bits)
+    input  wire [7:0] uio_in,   // Entrée B (8 bits)
+    output wire [7:0] uio_out,  // Inutilisé
+    output wire [7:0] uio_oe,   // Inutilisé
+    input  wire       ena,      // Toujours à 1
+    input  wire       clk,      // Horloge
+    input  wire       rst_n     // Reset actif bas
+);
+
+    // Désactivation des broches bidirectionnelles
+    assign uio_out = 8'b0;
+    assign uio_oe  = 8'b0;
+
+    // ALU simplifiée sur 8 bits pour tester le flux complet
+    reg [7:0] result;
+
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            result <= 8'b0;
+        end else begin
+            result <= ui_in + uio_in; // Addition de ui_in (A) et uio_in (B)
+        end
+    end 
+
+    assign uo_out = result;
+
+    // Évite les warnings de compilation pour les signaux non utilisés
+    wire _unused = &{ena, 1'b0};
+
+endmodule
+
