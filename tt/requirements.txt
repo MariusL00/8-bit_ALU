@@ -128,3 +128,5 @@ yowasp-runtime
     # via yowasp-yosys
 yowasp-yosys
     # via tt-support-tools (pyproject.toml)
+
+typst
