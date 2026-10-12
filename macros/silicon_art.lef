@@ -1,0 +1,9 @@
+MACRO silicon_art
+  CLASS BLOCK ;
+  SIZE 42.000 BY 26.042 ;
+  ORIGIN 0.0 0.0 ;
+  OBS
+    LAYER met3 ;
+      RECT 0.0 0.0 42.000 26.042 ;
+  END
+END silicon_art

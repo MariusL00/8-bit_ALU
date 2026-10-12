@@ -4,129 +4,127 @@
 #
 #    pip-compile
 #
-cairocffi
+cairocffi==1.7.1
     # via cairosvg
-cairosvg
+cairosvg==2.8.2
     # via tt-support-tools (pyproject.toml)
-certifi
+certifi==2025.8.3
     # via requests
-cffi
+cffi==1.17.1
     # via cairocffi
-cfgv
+cfgv==3.4.0
     # via pre-commit
-charset-normalizer
+charset-normalizer==3.4.2
     # via requests
-chevron
+chevron==0.14.0
     # via tt-support-tools (pyproject.toml)
-click
+click==8.2.1
     # via yowasp-yosys
-configupdater
+configupdater==3.2
     # via tt-support-tools (pyproject.toml)
-contourpy
+contourpy==1.3.3
     # via matplotlib
-cssselect2
+cssselect2==0.8.0
     # via cairosvg
-cycler
+cycler==0.12.1
     # via matplotlib
-defusedxml
+defusedxml==0.7.1
     # via cairosvg
-distlib
+distlib==0.4.0
     # via virtualenv
-filelock
+filelock==3.18.0
     # via virtualenv
-fonttools
+fonttools==4.60.1
     # via matplotlib
-gdstk
+gdstk==0.9.60
     # via tt-support-tools (pyproject.toml)
-gitdb
+gitdb==4.0.12
     # via gitpython
-gitpython
+gitpython==3.1.45
     # via tt-support-tools (pyproject.toml)
-identify
+identify==2.6.12
     # via pre-commit
-idna
+idna==3.10
     # via requests
-importlib-resources
+importlib-resources==6.5.2
     # via wasmtime
-iniconfig
+iniconfig==2.1.0
     # via pytest
-kiwisolver
+kiwisolver==1.4.9
     # via matplotlib
-klayout
+klayout==0.29.12
     # via tt-support-tools (pyproject.toml)
-matplotlib
+matplotlib==3.10.6
     # via tt-support-tools (pyproject.toml)
-mistune
+mistune==3.1.3
     # via tt-support-tools (pyproject.toml)
-mpremote
+mpremote==1.27.0
     # via tt-support-tools (pyproject.toml)
-nodeenv
+nodeenv==1.9.1
     # via pre-commit
-numpy
+numpy==1.26.4
     # via
     #   contourpy
     #   gdstk
     #   matplotlib
     #   tt-support-tools (pyproject.toml)
-packaging
+packaging==25.0
     # via
     #   matplotlib
     #   pytest
-pillow
+pillow==11.3.0
     # via
     #   cairosvg
     #   matplotlib
-platformdirs
+platformdirs==4.3.8
     # via
     #   mpremote
     #   virtualenv
     #   yowasp-runtime
-pluggy
+pluggy==1.6.0
     # via pytest
-pre-commit
+pre-commit==4.2.0
     # via tt-support-tools (pyproject.toml)
-pycparser
+pycparser==2.22
     # via cffi
-pygments
+pygments==2.19.2
     # via pytest
-pyparsing
+pyparsing==3.2.5
     # via matplotlib
-pyserial
+pyserial==3.5
     # via mpremote
-pytest
+pytest==8.4.2
     # via tt-support-tools (pyproject.toml)
-python-dateutil
+python-dateutil==2.9.0.post0
     # via matplotlib
-python-frontmatter
+python-frontmatter==1.1.0
     # via tt-support-tools (pyproject.toml)
-pyyaml
+pyyaml==6.0.2
     # via
     #   pre-commit
     #   python-frontmatter
     #   tt-support-tools (pyproject.toml)
-requests
+requests==2.32.4
     # via tt-support-tools (pyproject.toml)
-six
+six==1.17.0
     # via python-dateutil
-smmap
+smmap==5.0.2
     # via gitdb
-tinycss2
+tinycss2==1.4.0
     # via
     #   cairosvg
     #   cssselect2
-urllib3
+urllib3==2.5.0
     # via requests
-virtualenv
+virtualenv==20.33.1
     # via pre-commit
-wasmtime
+wasmtime==35.0.0
     # via yowasp-runtime
-webencodings
+webencodings==0.5.1
     # via
     #   cssselect2
     #   tinycss2
-yowasp-runtime
+yowasp-runtime==1.78
     # via yowasp-yosys
-yowasp-yosys
+yowasp-yosys==0.55.0.0.post944
     # via tt-support-tools (pyproject.toml)
-
-typst

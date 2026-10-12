@@ -52,4 +52,5 @@ pinout:
   uio[7]: "read_select[2]"
 
 # Do not change!
+gds_merge_file: "gds_merge.json"
 yaml_version: 6

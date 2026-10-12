@@ -31,4 +31,11 @@ module tt_um_alu_MariusL00 (
     // Évite les warnings de compilation pour les signaux non utilisés
     wire _unused = &{ena, 1'b0};
 
-endmodule 
+
+    // INSTANCIATION : À l'intérieur du module principal
+    //(* keep *) silicon_art art_inst();                                                                                              
+endmodule
+
+// DÉFINITION DE LA MACRO : Totalement en dehors, à la fin du fichier
+//(* blackbox *) (* keep *) module silicon_art (); 
+//endmodule 
