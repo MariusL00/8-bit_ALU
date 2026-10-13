@@ -1,9 +1,12 @@
 MACRO silicon_art
-  CLASS BLOCK ;
-  SIZE 42.000 BY 26.042 ;
-  ORIGIN 0.0 0.0 ;
-  OBS
-    LAYER met3 ;
-      RECT 0.0 0.0 42.000 26.042 ;
-  END
+  CLASS COVER ;
+  SIZE 40.000 BY 24.042 ;
+  ORIGIN 0.000 0.000 ;
+  PIN DUMMY
+    DIRECTION INPUT ;
+    PORT
+      LAYER met2 ;
+        RECT 0.000 0.000 2.000 2.000 ;
+    END
+  END DUMMY
 END silicon_art

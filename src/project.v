@@ -1,4 +1,4 @@
-`default_nettype none
+`default_nettype none                                                                                                                  
 
 module tt_um_alu_MariusL00 (
     input  wire [7:0] ui_in,    // Entrée A (8 bits)
@@ -23,19 +23,26 @@ module tt_um_alu_MariusL00 (
             result <= 8'b0;
         end else begin
             result <= ui_in + uio_in; // Addition de ui_in (A) et uio_in (B)
-        end
-    end
+        end 
+    end 
 
     assign uo_out = result;
 
     // Évite les warnings de compilation pour les signaux non utilisés
     wire _unused = &{ena, 1'b0};
 
+    // On crée un câble local pour forcer le routeur à trouver un chemin facile
+    wire dummy_route = ui_in[0];
 
-    // INSTANCIATION : À l'intérieur du module principal
-    //(* keep *) silicon_art art_inst();                                                                                              
+    // L'instance avec son ancrage LVS
+    (* keep *) silicon_art art_inst (
+        .DUMMY(dummy_route)
+    );
+
 endmodule
 
-// DÉFINITION DE LA MACRO : Totalement en dehors, à la fin du fichier
-//(* blackbox *) (* keep *) module silicon_art (); 
-//endmodule 
+// La déclaration pure, totalement en dehors
+(* blackbox *) module silicon_art (
+    input wire DUMMY
+);
+endmodule
