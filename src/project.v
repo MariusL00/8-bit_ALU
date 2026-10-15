@@ -31,18 +31,18 @@ module tt_um_alu_MariusL00 (
     // Évite les warnings de compilation pour les signaux non utilisés
     wire _unused = &{ena, 1'b0};
 
-    // On crée un câble local pour forcer le routeur à trouver un chemin facile
-    wire dummy_route = ui_in[0];
+    // Le câble fantôme : Yosys verra qu'il est piloté par l'ALU, mais ne mène nulle part
+    (* keep *) wire dummy_floating;
 
-    // L'instance avec son ancrage LVS
+    // INSTANCE
     (* keep *) silicon_art art_inst (
-        .DUMMY(dummy_route)
+        .DUMMY(dummy_floating)
     );
 
 endmodule
 
-// La déclaration pure, totalement en dehors
+// DÉFINITION : La broche est maintenant une SORTIE
 (* blackbox *) module silicon_art (
-    input wire DUMMY
+    output wire DUMMY
 );
 endmodule
