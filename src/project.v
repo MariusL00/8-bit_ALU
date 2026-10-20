@@ -31,21 +31,17 @@ module tt_um_alu_MariusL00 (
     // Évite les warnings de compilation pour les signaux non utilisés
     wire _unused = &{ena, 1'b0};
 
-    // Désactivation stricte de Verilator pour le câble fantôme
-    /* verilator lint_off UNUSEDSIGNAL */
+    // Le câble fantôme : Yosys verra qu'il est piloté par l'ALU, mais ne mène nulle part
     (* keep *) wire dummy_floating;
-    /* verilator lint_on UNUSEDSIGNAL */
 
-    // Désactivation de la vérification pour la broche non pilotée en interne
-    /* verilator lint_off UNDRIVEN */
+    // INSTANCE
     (* keep *) silicon_art art_inst (
         .DUMMY(dummy_floating)
     );
-    /* verilator lint_on UNDRIVEN */
 
 endmodule
 
-// DÉFINITION
+// DÉFINITION : La broche est maintenant une SORTIE
 (* blackbox *) module silicon_art (
     output wire DUMMY
 );

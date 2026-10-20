@@ -4,21 +4,21 @@ import os
 MACRO_NAME = "silicon_art"
 TEXT = "MARIUS"
 TEXT_SIZE = 10
-LAYER = 72         # Metal 5 (Pour le visuel)
-DATATYPE_ART = 44  # 44 = Annotation (Totalement ignoré par le DRC)
+LAYER = 72      # Metal 5
+DATATYPE = 0
 TARGET_LOGO_WIDTH = 40.0
 
 lib = gdstk.Library()
 art_cell = lib.new_cell(MACRO_NAME)
 
-# 1. Texte (Visuel -> Type 44)
-text_polys = gdstk.text(TEXT, TEXT_SIZE, (0, 0), layer=LAYER, datatype=DATATYPE_ART)
+# 1. Texte
+text_polys = gdstk.text(TEXT, TEXT_SIZE, (0, 0), layer=LAYER, datatype=DATATYPE)
 for p in text_polys:
     art_cell.add(p)
 text_bbox = art_cell.bounding_box()
 text_height = text_bbox[1][1] - text_bbox[0][1] if text_bbox else 0
 
-# 2. Logo (Visuel -> Type 44)
+# 2. Logo
 logo_path = "macros/logo_brut.gds"
 if os.path.exists(logo_path):
     logo_lib = gdstk.read_gds(logo_path)
@@ -32,7 +32,7 @@ if os.path.exists(logo_path):
         for poly in logo_cell.polygons:
             poly.scale(scale_factor)
             poly.layer = LAYER
-            poly.datatype = DATATYPE_ART
+            poly.datatype = DATATYPE
             poly.translate(x_offset, y_offset)
             art_cell.add(poly)
         for path in logo_cell.paths:
@@ -40,7 +40,7 @@ if os.path.exists(logo_path):
             path.translate(x_offset, y_offset)
             for path_poly in path.to_polygons():
                 path_poly.layer = LAYER
-                path_poly.datatype = DATATYPE_ART
+                path_poly.datatype = DATATYPE
                 art_cell.add(path_poly)
 
 # 3. Recalibrage global
@@ -56,11 +56,9 @@ if bbox:
 else:
     width, height = 1.0, 1.0
 
-# --- L'ANCRAGE LVS PHYSIQUE ---
-# Couche 69 (Metal 2), Datatype 20 (VRAI METAL). 
-# Ce carré parfait de 1x1 µm passera le DRC sans aucun problème.
-art_cell.add(gdstk.rectangle((0.0, 0.0), (1.0, 1.0), layer=69, datatype=20))
-art_cell.add(gdstk.Label("DUMMY", (0.5, 0.5), layer=69, texttype=16))
+# --- L'ANCRAGE LVS ---
+art_cell.add(gdstk.rectangle((0.0, 0.0), (1.0, 1.0), layer=69, datatype=0))
+art_cell.add(gdstk.Label("DUMMY", (0.5, 0.5), layer=69, texttype=5))
 
 # PR BOUNDARY globale
 pr_box = gdstk.rectangle((0.0, 0.0), (width, height), layer=235, datatype=4)
@@ -68,7 +66,7 @@ art_cell.add(pr_box)
 
 lib.write_gds(f"macros/{MACRO_NAME}.gds")
 
-# --- LE LEF (Inchangé) ---
+# --- LE LEF (CLASS COVER + DIRECTION OUTPUT) ---
 lef_content = f"""MACRO {MACRO_NAME}
   CLASS COVER ;
   SIZE {width:.3f} BY {height:.3f} ;
@@ -85,4 +83,4 @@ END {MACRO_NAME}
 with open(f"macros/{MACRO_NAME}.lef", "w") as f:
     f.write(lef_content)
 
-print(f"✅ Macro générée : Art en annotation (44), Ancrage LVS en physique (20).")
+print(f"✅ Macro générée avec broche OUTPUT.")
